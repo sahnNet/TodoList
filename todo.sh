@@ -1,12 +1,11 @@
 #! /bin/bash
 
-t="t"
-p="L"
+function add() {
+  t=""
+  p="L"
 
-if [ $1 = "add" ]; then
-  shift
   while [ -n "$1" ]; do
-    case "$1" in
+    case $1 in
     -t | --title)
       if [ -z \$2 ]; then
         echo "Option -t|--title Needs a Parameter"
@@ -17,16 +16,22 @@ if [ $1 = "add" ]; then
       shift
       ;;
     -p | --priority)
-      if [ $2 = "L" ] || [ $2 = "M" ] || [ $2 = "H" ]; then
-        p=$2
-        shift
-        shift
-      else
+      if [ $2 != "L" ] && [ $2 != "M" ] && [ $2 != "H" ]; then
         echo "Option -p|--priority Only Accept L|M|H"
         exit 1
       fi
+      p=$2
+      shift
+      shift
       ;;
     esac
   done
-  echo 0,$p,\"$t\"
-fi
+  echo 0,$p,\"$t\" >>tasks.csv
+}
+
+case $1 in
+add)
+  shift
+  add "$@"
+  ;;
+esac
