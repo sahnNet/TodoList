@@ -38,18 +38,25 @@ function list_tacks() {
   awk -F\, '{print NR" | "$1" | "$2" | "$3}' tasks.csv
 }
 
+function find_tacks() {
+  awk -F\, -v var="$1" '$3 ~ var {print NR" | "$1" | "$2" | "$3}' tasks.csv
+}
+
 case $1 in
-add)
+"add")
   shift
   add_tacks "$@"
   ;;
-clear)
+"clear")
   clear_tacks
   ;;
-list)
+"list")
   list_tacks
   ;;
-*)echo Command Not Supported!
-
+"find")
+  find_tacks $2
+  ;;
+*)
+  echo Command Not Supported!
   ;;
 esac
